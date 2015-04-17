@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by ATC-NY Silverline version 0.8.1 on 2/6/15 4:42 PM.  http://www.atcorp.com -->
+<TestRecord xmlns="http://www.atc-nycorp.com/silverline/testrecord/2014/08" xmlns:xlink="http://www.w3.org/1999/xlink" title="Attack Tree - Test Record" author="jpowers" description="Created by jpowers on 12/10/14 2:01 PM" timestamp="2014-12-10T14:01:24.464-05:00">
+  <Tree xlink:href="EvalDemoFedora.satf" timestamp="2014-12-11T12:57:39.840-05:00" />
+  <Target type="ssh" hostname="172.24.15.4" user="fedora" keyfile="jpowers-silverline.pem" alias="keyserver" />
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="2dff5292-9faa-4011-bbaf-9dc8ef587155">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="3ec93bf1-e965-4019-83d3-1db192a70d53">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="cd52bcea-837b-40b8-b1ba-876fd21da10e">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.198-05:00" target="ssh:fedora@172.24.15.4" id="35948d7d-2b28-42e2-8fe1-537800185849">
+    <RawResults>Definition oval:ssg:def:8: true
+Definition oval:ssg:def:1: true
+Evaluation done.</RawResults>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="c76d9a08-eadf-426e-b23f-b71196625670">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="2ec4f27f-4f6f-4980-9674-447ed913d779">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+  <Node auto_result="false" timestamp="2015-02-06T16:42:49.318-05:00" id="587c2c7c-65fe-421f-a081-decb3f101225">
+    <Notes>Automatic computation from sub-goal values.</Notes>
+  </Node>
+</TestRecord>
