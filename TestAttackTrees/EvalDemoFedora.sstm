@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Silverline version 0.9.0 on 7/10/15 2:15 PM. https://www.atcorp.com/ -->
+<AttackTree xmlns="http://www.atc-nycorp.com/silverline/treemodel/2015/04" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <Metadata>
+    <dc:title>Example Attack Tree</dc:title>
+    <dc:date>2015-07-10T14:15:10.990-04:00</dc:date>
+  </Metadata>
+  <Node id="3ec93bf1-e965-4019-83d3-1db192a70d53" name="Connect to Telnet" success="OR">
+    <Node id="3864ba47-fc1b-43a5-9e73-ffc7d30b4ce0" name="Telnet is installed" success="OR">
+      <Attr ns="test:cmd" name="pattern" type="String">^Installed Packages$</Attr>
+      <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+      <Attr ns="test:cmd" name="command" type="String">yum info telnet-server</Attr>
+      <Attr ns="test" name="target" type="String">keyserver</Attr>
+      <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+      <Attr ns="test:cmd" name="needadmin" type="Boolean">true</Attr>
+    </Node>
+    <OverlayNode id="2dff5292-9faa-4011-bbaf-9dc8ef587155" name="Connect to disabled network service">
+      <Template xlink:title="Connect to disabled network service" xlink:href="#cd52bcea-837b-40b8-b1ba-876fd21da10e" />
+      <ParameterValue name="port">23</ParameterValue>
+      <ParameterValue name="service">telnet</ParameterValue>
+    </OverlayNode>
+  </Node>
+  <Node id="587c2c7c-65fe-421f-a081-decb3f101225" name="Connect to blocked network service" description="Connect to a network service that is blocked. Blocked services are network services that are running on the host and listening on a public interface but cannot be connected to per the system's configuration." success="OR">
+    <ParameterDeclaration name="port" description="Port on which the network service runs" type="Integer" />
+    <ParameterDeclaration name="service" description="Blocked network service" type="String" />
+    <Attr ns="test:cmd" name="count" type="Integer">1</Attr>
+    <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+    <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+    <Node id="2ec4f27f-4f6f-4980-9674-447ed913d779" name="Firewall is misconfigured" description="Firewall is incorrectly configured to allow connections to $service." success="OR">
+      <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+      <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+      <Node id="35948d7d-2b28-42e2-8fe1-537800185849" name="Firewall configuration on disk is misconfigured" description="The on-disk firewall configuration should permit only SSH (22), Postgresql (5432), and the Key Service (4080)">
+        <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.scap</Attr>
+        <Attr ns="test:scap" name="ovalsrc" type="URI">firewall-fedora-oval.xml</Attr>
+        <Attr ns="test" name="target" type="String">keyserver</Attr>
+        <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+        <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+      </Node>
+      <Node id="de3cd061-4777-4951-8dbe-adf051b2f753" name="Active firewall configuration is misconfigured" success="OR">
+        <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+        <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+        <Node id="0bbc83b1-956b-48cf-82f1-51f5af705aa9" name="Does not allow SSH">
+          <Attr ns="test:cmd" name="pattern" type="String">state NEW tcp dpt:22</Attr>
+          <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+          <Attr ns="test:cmd" name="command" type="String">/sbin/iptables -n -L</Attr>
+          <Attr ns="test" name="target" type="String">keyserver</Attr>
+          <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+          <Attr ns="test:cmd" name="needadmin" type="Boolean">true</Attr>
+          <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+          <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+        </Node>
+        <Node id="b844ffed-f22a-4fed-8d6f-9bfc9be5d570" name="Does not allow Postgres">
+          <Attr ns="test:cmd" name="pattern" type="String">state NEW tcp dpt:5432</Attr>
+          <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+          <Attr ns="test:cmd" name="command" type="String">/sbin/iptables -n -L</Attr>
+          <Attr ns="test" name="target" type="String">keyserver</Attr>
+          <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+          <Attr ns="test:cmd" name="needadmin" type="Boolean">true</Attr>
+          <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+          <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+        </Node>
+        <Node id="c5fb31db-457e-449d-acd9-b9dbeed1df4a" name="Does not allow SKS">
+          <Attr ns="test:cmd" name="pattern" type="String">state NEW tcp dpt:4080</Attr>
+          <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+          <Attr ns="test:cmd" name="command" type="String">/sbin/iptables -n -L</Attr>
+          <Attr ns="test" name="target" type="String">keyserver</Attr>
+          <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+          <Attr ns="test:cmd" name="needadmin" type="Boolean">true</Attr>
+          <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+          <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+        </Node>
+        <Node id="6412229f-12e9-4c68-b0a9-7601153b9f55" name="Permits connections other than SSH, Postgres, and SKS over TCP">
+          <Attr ns="test:cmd" name="pattern" type="String">state NEW</Attr>
+          <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+          <Attr ns="test:cmd" name="command" type="String">/sbin/iptables -n -L</Attr>
+          <Attr ns="test" name="target" type="String">keyserver</Attr>
+          <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+          <Attr ns="test:cmd" name="needadmin" type="Boolean">true</Attr>
+          <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+          <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+        </Node>
+      </Node>
+      <Node id="7d982ece-f906-426b-99e1-2215592ad8f7" name="Firewall is not enabled on startup">
+        <Attr ns="test:cmd" name="pattern" type="String">^enabled$</Attr>
+        <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+        <Attr ns="test:cmd" name="command" type="String">systemctl is-enabled iptables ip6tables</Attr>
+        <Attr ns="test" name="target" type="String">keyserver</Attr>
+        <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+        <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+        <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+      </Node>
+      <Node id="cd1efa9d-cc11-4787-bb48-1cc54fbb9bf2" name="Firewall is not currently running">
+        <Attr ns="test:cmd" name="pattern" type="String">^active$</Attr>
+        <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+        <Attr ns="test:cmd" name="command" type="String">systemctl is-active iptables ip6tables</Attr>
+        <Attr ns="test" name="target" type="String">keyserver</Attr>
+        <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+        <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+        <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+      </Node>
+    </Node>
+    <Node id="0ac93384-0985-4743-9428-92ce3d2762df" name="Modify firewall configuration" success="OR">
+      <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+      <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+    </Node>
+    <Node id="58ba1495-2398-45af-ad7c-dd2f9468be4d" name="Firewall permits connection despite configuration">
+      <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+      <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+      <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+      <Attr ns="test" name="target" type="String">internal cloud</Attr>
+      <Attr ns="test:cmd" name="command" type="String">DescribeVpnConnections&amp;foo=bar</Attr>
+      <Attr ns="test:cmd" name="pattern" type="String">\Qyes\E</Attr>
+    </Node>
+    <Node id="c1153a7d-9ff1-4ea6-953d-ae630c9bf3eb" name="Disable firewall">
+      <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.remotecommand</Attr>
+      <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+      <Attr ns="test" name="target" type="String">database server</Attr>
+      <Attr ns="test:cmd" name="command" type="String">uname -m</Attr>
+      <Attr ns="test:cmd" name="pattern" type="String">\Qbad test\E</Attr>
+      <Attr ns="user" name="Remediation Cost" computed_from="children" function_type="TestBasedCostAggregator">REMEDIATION_COST</Attr>
+      <Attr ns="user" name="Severity" computed_from="children" function_type="DoubleAggregator">SUM</Attr>
+    </Node>
+  </Node>
+  <Node id="cd52bcea-837b-40b8-b1ba-876fd21da10e" name="Connect to disabled network service" description="Connect to a network service that is disabled. Disabled services are not configured to run on the host. Further, the firewall is configured to deny connections to these services." success="OR">
+    <ParameterDeclaration name="port" description="Port on which the network service runs" type="Integer" />
+    <ParameterDeclaration name="service" description="Blocked network service" type="String" />
+    <OverlayNode id="c76d9a08-eadf-426e-b23f-b71196625670" name="Connect to blocked network service">
+      <Template xlink:title="Connect to blocked network service" xlink:href="#587c2c7c-65fe-421f-a081-decb3f101225" />
+    </OverlayNode>
+    <Node id="4119aa6e-c6f2-4f39-ba66-2310a5659d28" name="Enable network service" success="OR">
+      <Node id="9f669bb1-93a5-4d14-b481-bc80b309da26" name="Service is misconfigured (enabled)" />
+      <Node id="802cbea5-dd67-4b41-b761-a12adbdcc1b2" name="Service is running despite configuration" />
+      <Node id="354bd747-c504-4016-8714-8bc5a6406c0c" name="Cause service to run" />
+    </Node>
+  </Node>
+</AttackTree>
