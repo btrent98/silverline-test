@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created by Silverline version 0.9.0 on 7/10/15 4:16 PM. https://www.atcorp.com/ -->
+<TreeModel xmlns="http://www.atc-nycorp.com/silverline/treemodel/2015/04" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <Metadata>
+    <dc:title>Tree Model for a Hypothetical Cloud Directory Service</dc:title>
+    <dc:description>Providing Active Directory and file sharing services to clients.</dc:description>
+    <dc:date>2015-07-10T16:16:24.998-04:00</dc:date>
+  </Metadata>
+  <Node id="4570909f-ea85-4236-8661-807a04d7c763" name="Internal Cloud Configuration" success="OR">
+    <Node id="317dd1a1-9c70-4ea5-b70f-0a639d217317" name="SSH Security Group Limited to Our IP">
+      <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.cloudcommand</Attr>
+      <Attr ns="test:cmd" name="count" type="Long">1</Attr>
+      <Attr ns="test" name="target" type="String">main controller</Attr>
+      <Attr ns="test:cmd" name="command" type="String">DescribeSecurityGroups&amp;Filter.1.Name=ip-permission.to-port&amp;Filter.1.Value=22&amp;GroupId.0=sg-f411f591</Attr>
+      <Attr ns="test:cmd" name="pattern" type="String">\Q192.76.175.3\E</Attr>
+    </Node>
+  </Node>
+  <Node id="808ae8c0-fe9a-455f-a19d-e6dbc9120b7a" name="Active Directory Service" success="AND">
+    <Node id="6e9b09cc-28bd-4d4a-a179-4c994118a0d2" name="Samba" description="Active Directory server software">
+      <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.nvdlookup</Attr>
+      <Attr ns="test:nvd" name="cpe" type="String">cpe:/a:samba:samba:4.1.9</Attr>
+    </Node>
+    <Node id="cafdeecf-fbb4-4cac-b912-c4e66619934a" name="Operating System">
+      <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.nvdlookup</Attr>
+      <Attr ns="test:nvd" name="cpe" type="String">cpe:/o:freebsd:freebsd:9.2:-</Attr>
+    </Node>
+    <Node id="87cf07f6-e9de-4d2e-b9ed-e0c07be62696" name="Other Server Software" success="AND">
+      <Node id="d335b0af-8dba-4436-a21d-1654a29a50bc" name="DHCP">
+        <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.nvdlookup</Attr>
+        <Attr ns="test:nvd" name="cpe" type="String">cpe:/a:isc:dhcp:4.2.6</Attr>
+      </Node>
+    </Node>
+    <Node id="579fbbc2-dada-4fb2-9a29-6d64b8417a37" name="Library Dependencies" success="AND">
+      <Attr ns="test:nvd" name="cpe" type="String" />
+      <Node id="79c5008f-7716-4f1e-b561-a1af9eae3c7d" name="OpenSSL">
+        <Attr ns="test" name="evaluator" type="String">com.atc_nycorp.silverline.evaluator.nvdlookup</Attr>
+        <Attr ns="test:nvd" name="cpe" type="String">cpe:/a:openssl:openssl:1.0.2</Attr>
+      </Node>
+    </Node>
+  </Node>
+</TreeModel>
